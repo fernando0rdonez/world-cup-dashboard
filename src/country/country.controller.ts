@@ -1,24 +1,46 @@
-import { Controller, Delete, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { CountryService } from './country.service';
+import { CreateCountryDto } from './dto/create-country.dto';
+import { UpdateCountryDto } from './dto/update-country.dto';
 
 @Controller('country')
 export class CountryController {
+  constructor(private countryService: CountryService) {}
+
   @Get()
   listCountries() {
-    return [];
+    return this.countryService.list();
   }
 
   @Get('/:id')
-  showCountry() {
-    return 'single country';
+  show(@Param('id', ParseUUIDPipe) id: string) {
+    return this.countryService.show(id);
   }
 
   @Post()
-  createCountry() {
-    return 'add';
+  add(@Body() createCountryDto: CreateCountryDto) {
+    return this.countryService.add(createCountryDto);
+  }
+
+  @Put('/:id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateCountryDto: UpdateCountryDto,
+  ) {
+    return this.countryService.update(id, updateCountryDto);
   }
 
   @Delete('/:id')
-  deleteCountry() {
-    return 'delete';
+  deleteCountry(@Param('id', ParseUUIDPipe) id: string) {
+    return this.countryService.delete(id);
   }
 }
