@@ -8,7 +8,7 @@ export class CountryService {
   countries = {};
 
   list() {
-    return this.countries;
+    return Object.values(this.countries);
   }
 
   add(createCountryDto: CreateCountryDto) {
@@ -40,7 +40,7 @@ export class CountryService {
     const country = this.countries[id];
     if (country) {
       delete this.countries[id];
-      return 'deleted';
+      return { message: 'delete' };
     }
     throw new BadRequestException();
   }
